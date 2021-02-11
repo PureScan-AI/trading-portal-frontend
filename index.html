@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+  <title>Quality Trading Portal</title>
+  <script src="/js/papaparse.min.js"></script>
+  <script src="/js/vue.js"></script>
+  <script src="/js/main.js"></script>
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body{
+      padding: 0;
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      width: 100%;
+      text-align: center;
+      background: #eff1f5;
+      color: #2f2e41;
+    }
+    main{
+      display: inline-block;
+      text-align: left;
+      width: 100%;
+      max-width: 720px;
+      padding: 8px;
+    }
+    h1,h2,h3,p{
+      margin: 6px 0;
+      padding: 0;
+    }
+    .btn{
+      display: inline-block;
+      background: #15a89c;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+    
+    .record{
+      background: #ffffff;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 4px;
+      display: grid;
+      width: 100%;
+      grid-template-columns: 2fr 1fr;
+    }
+    .record h2{
+      color: #15a89c;
+      grid-column: span 2;
+    }
+    .record h3{
+      text-transform: capitalize;
+    }
+  </style>
+  
+</head>
+<body onload="init()">
+  <main>
+    <div id="portalApp">
+      <div v-for="record in records" class="record">
+        <h2>{{record.commodity}}</h2>
+          
+        <div>
+          <h3>{{record.variety}} variety, {{record.processing}}</h3>
+          <p>
+            <b>Seller:</b> {{record.sellerName}} ({{record.sellerType}})
+          </p>
+          <p>
+            <b>Available Quantity:</b> {{record.quantityAvailable}} {{record.quantityUnits}}
+          </p>
+          <p>
+            <b>Aflatoxin Content:</b> {{record.aflatoxinQuality}} {{record.aflatoxinQualityUnits}}
+          </p>  
+          
+          <p>
+            <b>Harvested:</b> {{record.harvestTime}}
+          </p>  
+          
+          <p>
+            <b>Storage Details:</b> {{record.storageDetails}}
+          </p>  
+          
+        </div>
+        <div>
+          <p>
+            <b>Price:</b> Rs. {{record.price}} / {{record.priceUnit}}
+          </p>
+          <p>
+            <b>Mininmum Order:</b> {{record.minimumOrderQuantity}} {{record.minimumOrderUnit}}
+          </p>
+          <p>
+            <a class="btn" href="/">Buy</a>
+          </p>  
+        </div>  
+      </div>
+    </div>
+  </main>
+</body>
+</html>
