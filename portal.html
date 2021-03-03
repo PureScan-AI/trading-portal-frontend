@@ -16,10 +16,28 @@
       box-sizing: border-box;
       font-family: font1;
     }
-    
+    a:hover{
+      cursor: pointer;
+      cursor: hand;
+    }
     .main-wrapper{
       display: grid;
       grid-template-columns: 1fr 3fr;
+    }
+    
+    #loading{
+      color: var(--darker);
+      padding: 5rem;
+      text-align: center;
+      width: 100%;
+      min-height: 90vh;
+    }
+    #loading>div{
+      grid-column: span 2;    
+    }
+    
+    #portalApp{
+      display: none;
     }
     
     main{
@@ -62,7 +80,7 @@
       align-items: center;
       
     }
-    #filters label>span{
+    #filters label>span, #filters label>div{
       display: inline-block;
       color: var(--darker);
       font-size: 1rem;
@@ -92,6 +110,11 @@
       font-size: 1rem;
       color: var(--theme);
     }
+    
+    #filters input.dual{
+      width: 6rem;
+    }
+    
     
     #filters input:focus{
       border: 1px solid transparent;
@@ -132,6 +155,9 @@
     .no-supply h2{
       color: var(--theme);
     }
+    .order-link{
+      color: var(--theme);
+    }
   </style>
   
 </head>
@@ -151,6 +177,10 @@
     </nav>
   </header>
   
+  <div class="main-wrapper" id="loading">
+    <div>Loading...</div>
+  </div>
+  
   <div class="main-wrapper" id="portalApp">
     <div id="filters">
       <h2>Filters</h2>
@@ -160,19 +190,18 @@
         <select v-model="filters.commodity">
           <option value="">Any</option>
           <option value="peanuts">Peanuts</option>
-          <option value="maize">Maize</option>
+          <option value="corn">Corn</option>
         </select>
       </label>
       <label>
         <span>Variety:</span>
         <select v-model="filters.variety">
           <option value="">Any</option>
-          <option value="bold">Bold</option>
-          <option value="yellow maize">Yellow Maize</option>
-          <option value="african tall maize">African Tall Maize</option>
-          <option value="fodder">Fodder</option>
-          <option value="java">Java</option>
-          
+          <option value="bold" v-if="filters.commodity=='peanuts'">Bold</option>
+          <option value="yellow maize" v-if="filters.commodity=='corn'">Yellow Maize</option>
+          <option value="african tall maize" v-if="filters.commodity=='corn'">African Tall Maize</option>
+          <option value="fodder" v-if="filters.commodity=='corn'">Fodder</option>
+          <option value="java" v-if="filters.commodity=='peanuts'">Java</option>
         </select>
       </label>
       <label>
@@ -187,6 +216,15 @@
         <span>Quantity:</span>
         <div>
           <input v-model="filters.quantity" type="number" step="5">
+        </div>
+      </label>
+      <label>
+        <span>Aflatoxin:</span>
+        <div>
+          <input class="dual" v-model="filters.minAflatoxin" type="number" step="5">
+          -
+          <input class="dual" v-model="filters.maxAflatoxin" type="number" step="5">
+          ppb
         </div>
       </label>
       
@@ -222,10 +260,20 @@
               <b>Price:</b> Rs. {{record.price}} / {{record.priceUnit}}
             </p>
             <p>
-              <b>Mininmum Order:</b> {{record.minimumOrderQuantity}} {{record.minimumOrderUnit}}
+              <b>Minimum Order:</b> {{record.minimumOrderQuantity}} {{record.minimumOrderUnit}}
             </p>
-            <p>
-              <a class="btn" href="/">Buy</a>
+            <p v-if="record.buyClicked">
+              <a v-bind:href="maillink(record)" class="order-link" target="_blank">
+                Order via email: team@purescanai.com
+              </a>
+              <br>
+              or
+              <a href="tel:+919087601224" class="order-link">
+                Order via call: +91 90876 01224
+              </a>
+            </p>
+            <p v-else>
+              <a class="btn" v-on:click="buy(record)">Buy</a>
             </p>  
           </div>  
         </div>

@@ -124,11 +124,13 @@ a{
 a.btn{
   display: inline-block;
   background: var(--theme);
-  padding: 2mm 5mm;
+  padding: 1mm 5mm;
   border-radius: 10mm;
   color: var(--lighter);
   font-family: font1;
   text-decoration: none;
+  min-width: 20mm;
+  text-align: center;
 }
 img[class^="box"] {
   padding: 0px;
